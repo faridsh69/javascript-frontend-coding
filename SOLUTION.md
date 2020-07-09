@@ -9,11 +9,12 @@
 + This component must be reusable.
 + First example should works fine as it is working fine.
 + After onSelect triggered that Item should replace in input.
-Up/Down keys should works for select between options and enter should trigger onSelect.
++ Up/Down keys should works for select between options and enter should trigger onSelect.
 +	After user click on Up Down keys update selected number
 +	Based on selected number add hover class to item
-	Test and finalize code 
-
++ 	Test and finalize code 
++	handle using mouse over and arrow keys toghether
++ clearTimeout for stop sending a lot of ajax to server
 
 + New APIs and your notes should be documented in SOLUTION.md.
 

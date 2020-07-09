@@ -10,7 +10,10 @@ export default class Autocomplete {
     if(this.options.url){
       let url = this.options.url.replace('{query}', query)
         .replace('{numOfResults}', this.options.numOfResults);
-      this.getUrlResponse(url);
+      clearTimeout(this.loadAjaxData);
+      this.loadAjaxData = setTimeout(() => {
+        this.getUrlResponse(url);
+      }, 300)
     }else{
       let results = this.getResults(query, this.options.data);
       results = results.slice(0, this.options.numOfResults);
@@ -18,7 +21,7 @@ export default class Autocomplete {
     }
   }
 
-  // Get response of ajax and render it to an array
+  // Get response of ajax and render it to an array of user id and text.
   getUrlResponse(url) {
     fetch(url, { headers: { "Content-Type": "application/json; charset=utf-8" }})
       .then(res => res.json())
