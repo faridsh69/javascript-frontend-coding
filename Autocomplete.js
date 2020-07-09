@@ -92,7 +92,21 @@ export default class Autocomplete {
     inputEl.addEventListener('input', event =>
       this.onQueryChange(event.target.value));
 
+    inputEl.addEventListener('keyup', event =>
+      this.handleKeys(event.which));
+
     return inputEl;
+  }
+
+  handleKeys(keyboardCode) {
+    // Up arrow key pressed
+    if (keyboardCode == 38) {
+      console.log('Up');
+    }
+    // Down arrow key pressed
+    if (keyboardCode == 40) {
+      console.log('Down');
+    }
   }
 
   init() {
