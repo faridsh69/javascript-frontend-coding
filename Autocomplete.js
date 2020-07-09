@@ -1,18 +1,38 @@
 export default class Autocomplete {
   constructor(rootEl, options = {}) {
     options = Object.assign({ numOfResults: 10, data: [], url: '' }, options);
-    console.log(options);
     Object.assign(this, { rootEl, options });
 
     this.init();
   }
 
   onQueryChange(query) {
-    // Get data for the dropdown
-    let results = this.getResults(query, this.options.data);
-    results = results.slice(0, this.options.numOfResults);
+    if(this.options.url){
+      let url = this.options.url.replace('{query}', query)
+        .replace('{numOfResults}', this.options.numOfResults);
+      this.options.data = this.getUrlResponse(url);
+    }else{
+      let results = this.getResults(query, this.options.data);
+      results = results.slice(0, this.options.numOfResults);
+      this.updateDropdown(results);
+    }
+  }
 
-    this.updateDropdown(results);
+  // Get response of ajax and render it to an array
+  getUrlResponse(url) {
+    fetch(url, { headers: { "Content-Type": "application/json; charset=utf-8" }})
+      .then(res => res.json())
+      .then(response => {
+        this.options.data = response.items.map(user => ({
+          text: user.login,
+          value: user.id
+        }));
+
+        this.updateDropdown(this.options.data);
+      })
+      .catch(err => {
+        // handle ajax error
+      });
   }
 
   /**
