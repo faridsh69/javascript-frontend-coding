@@ -1,7 +1,7 @@
 # Solution Docs
 
-We need a select with 2 input types:
-	1 array
++ We need a select with 2 input types:
++	1 array
 	2 url - https://api.github.com/search/users?q={query}&per_page={numOfResults} 
 
 This component cant use both array and url.

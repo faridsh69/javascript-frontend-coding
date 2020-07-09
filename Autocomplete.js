@@ -1,6 +1,7 @@
 export default class Autocomplete {
   constructor(rootEl, options = {}) {
-    options = Object.assign({ numOfResults: 10, data: [] }, options);
+    options = Object.assign({ numOfResults: 10, data: [], url: '' }, options);
+    console.log(options);
     Object.assign(this, { rootEl, options });
 
     this.init();

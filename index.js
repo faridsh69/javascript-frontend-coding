@@ -15,9 +15,12 @@ new Autocomplete(document.getElementById('state'), {
   },
 });
 
+// Github Url
+const url = 'https://api.github.com/search/users?q={query}&per_page={numOfResults}';
 
 // Github Users
 new Autocomplete(document.getElementById('gh-user'), {
+  url,
   onSelect: (ghUserId) => {
     console.log('selected github user id:', ghUserId);
   },
