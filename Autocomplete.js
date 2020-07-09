@@ -64,14 +64,18 @@ export default class Autocomplete {
 
       // Pass the value to the onSelect callback
       el.addEventListener('click', (event) => {
-        const { onSelect } = this.options;
-        if (typeof onSelect === 'function') onSelect(result.value);
-        this.addSelectedItemToInput(result.text);
+        this.selectItem();
       });
 
       fragment.appendChild(el);
     });
     return fragment;
+  }
+
+  selectItem() {
+    const { onSelect } = this.options;
+    if (typeof onSelect === 'function') onSelect(result.value);
+    this.addSelectedItemToInput(result.text);
   }
 
   addSelectedItemToInput(text) {
@@ -93,21 +97,39 @@ export default class Autocomplete {
       this.onQueryChange(event.target.value));
 
     inputEl.addEventListener('keyup', event =>
-      this.handleKeys(event.which));
+      this.handleKeyboardPress(event.which));
 
     return inputEl;
   }
 
-  handleKeys(keyboardCode) {
-    // Up arrow key pressed
-    if (keyboardCode == 38) {
-      console.log('Up');
+  handleKeyboardPress(keyboardCode) {
+    if (keyboardCode == 13) {
+      // Enter pressed
+      selectItem();
+    } else if (keyboardCode == 38) {
+      // Up arrow key pressed
+      console.log(this.selectedItem);
+      this.selectedItem --;
+      console.log(this.selectedItem);
+    } else if (keyboardCode == 40) {
+      // Down arrow key pressed
+      this.selectedItem ++;
+    }else{
+      this.selectedItem = -1;
     }
-    // Down arrow key pressed
-    if (keyboardCode == 40) {
-      console.log('Down');
-    }
+    this.changeSelectedOption();
   }
+
+  changeSelectedOption() {
+    for (let element of this.listEl.children) {
+      element.classList.remove('result-hover');
+    }
+    let selectedItemIndex = (this.options.numOfResults % this.selectedItem) - 1;
+    if(selectedItemIndex > -1)
+      this.listEl.children[selectedItemIndex].classList.add('result-hover');
+  }
+
+  // we need a function to set 0 select Item after hover
 
   init() {
     // Build query input
@@ -118,5 +140,6 @@ export default class Autocomplete {
     this.listEl = document.createElement('ul');
     Object.assign(this.listEl, { className: 'results' });
     this.rootEl.appendChild(this.listEl);
+    this.selectedItem = 3;
   }
 }
