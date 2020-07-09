@@ -56,7 +56,7 @@ export default class Autocomplete {
   createResultsEl(results) {
     this.results = results;
     const fragment = document.createDocumentFragment();
-    results.forEach((result) => {
+    results.forEach((result, index) => {
       const el = document.createElement('li');
       Object.assign(el, {
         className: 'result',
@@ -69,7 +69,7 @@ export default class Autocomplete {
       });
 
       el.addEventListener('mouseover', (event) => {
-        this.hoverOnListItems(event.target);
+        this.hoverOnListItems(event.target, index);
       });
 
       fragment.appendChild(el);
@@ -135,12 +135,12 @@ export default class Autocomplete {
   }
 
   // We need to reset selected option after mouse hover on list items.
-  hoverOnListItems(eventTarget) {
+  hoverOnListItems(eventTarget, index) {
     for (let element of this.listEl.children) {
       element.classList.remove('result-hover');
     }
     eventTarget.classList.add('result-hover');
-    this.selectedItem = this.results.length;
+    this.selectedItem = index;
   }
 
   init() {
