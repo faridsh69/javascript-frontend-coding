@@ -76,6 +76,9 @@ export default class Autocomplete {
 
   addSelectedItemToInput(text) {
     this.inputEl.value = text;
+    let event = document.createEvent('Event');
+    event.initEvent('input', true, true);
+    this.inputEl.dispatchEvent(event);
   }
 
   createQueryInputEl() {
