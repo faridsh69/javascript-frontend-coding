@@ -68,6 +68,10 @@ export default class Autocomplete {
         this.selectItem(result);
       });
 
+      el.addEventListener('mouseover', (event) => {
+        this.hoverOnListItems(event.target);
+      });
+
       fragment.appendChild(el);
     });
     return fragment;
@@ -102,7 +106,7 @@ export default class Autocomplete {
   }
 
   handleKeyboardPress(keyboardCode) {
-    if(!this.results) return;
+    if(!this.results || this.results.length == 0) return;
     if (keyboardCode == 13) {
       // Enter pressed
       let selectedItemIndex = this.selectedItem % this.results.length;
@@ -111,6 +115,8 @@ export default class Autocomplete {
     } else if (keyboardCode == 38) {
       // Up arrow key pressed
       this.selectedItem --;
+      if (this.selectedItem < 0)
+        this.selectedItem += this.results.length;
     } else if (keyboardCode == 40) {
       // Down arrow key pressed
       this.selectedItem ++;
@@ -125,11 +131,17 @@ export default class Autocomplete {
       element.classList.remove('result-hover');
     }
     let selectedItemIndex = this.selectedItem % this.results.length;
-    console.log(selectedItemIndex);
     this.listEl.children[selectedItemIndex].classList.add('result-hover');
   }
 
-  // we need a function to set 0 select Item after hover
+  // We need to reset selected option after mouse hover on list items.
+  hoverOnListItems(eventTarget) {
+    for (let element of this.listEl.children) {
+      element.classList.remove('result-hover');
+    }
+    eventTarget.classList.add('result-hover');
+    this.selectedItem = this.results.length;
+  }
 
   init() {
     // Build query input
