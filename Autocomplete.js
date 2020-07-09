@@ -54,6 +54,7 @@ export default class Autocomplete {
   }
 
   createResultsEl(results) {
+    this.results = results;
     const fragment = document.createDocumentFragment();
     results.forEach((result) => {
       const el = document.createElement('li');
@@ -64,7 +65,7 @@ export default class Autocomplete {
 
       // Pass the value to the onSelect callback
       el.addEventListener('click', (event) => {
-        this.selectItem();
+        this.selectItem(result);
       });
 
       fragment.appendChild(el);
@@ -72,7 +73,7 @@ export default class Autocomplete {
     return fragment;
   }
 
-  selectItem() {
+  selectItem(result) {
     const { onSelect } = this.options;
     if (typeof onSelect === 'function') onSelect(result.value);
     this.addSelectedItemToInput(result.text);
@@ -80,9 +81,7 @@ export default class Autocomplete {
 
   addSelectedItemToInput(text) {
     this.inputEl.value = text;
-    let event = document.createEvent('Event');
-    event.initEvent('input', true, true);
-    this.inputEl.dispatchEvent(event);
+    this.listEl.innerHTML = '';
   }
 
   createQueryInputEl() {
@@ -105,17 +104,16 @@ export default class Autocomplete {
   handleKeyboardPress(keyboardCode) {
     if (keyboardCode == 13) {
       // Enter pressed
-      selectItem();
+      let selectedItemIndex = this.selectedItem % this.results.length;
+      this.selectItem(this.listEl.children[selectedItemIndex]);
     } else if (keyboardCode == 38) {
       // Up arrow key pressed
-      console.log(this.selectedItem);
       this.selectedItem --;
-      console.log(this.selectedItem);
     } else if (keyboardCode == 40) {
       // Down arrow key pressed
       this.selectedItem ++;
     }else{
-      this.selectedItem = -1;
+      this.selectedItem = this.results.length;
     }
     this.changeSelectedOption();
   }
@@ -124,9 +122,8 @@ export default class Autocomplete {
     for (let element of this.listEl.children) {
       element.classList.remove('result-hover');
     }
-    let selectedItemIndex = (this.options.numOfResults % this.selectedItem) - 1;
-    if(selectedItemIndex > -1)
-      this.listEl.children[selectedItemIndex].classList.add('result-hover');
+    let selectedItemIndex = this.selectedItem % this.results.length;
+    this.listEl.children[selectedItemIndex].classList.add('result-hover');
   }
 
   // we need a function to set 0 select Item after hover
@@ -140,6 +137,6 @@ export default class Autocomplete {
     this.listEl = document.createElement('ul');
     Object.assign(this.listEl, { className: 'results' });
     this.rootEl.appendChild(this.listEl);
-    this.selectedItem = 3;
+    this.selectedItem = 0;
   }
 }
