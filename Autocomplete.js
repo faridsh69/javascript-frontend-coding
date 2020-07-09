@@ -66,11 +66,16 @@ export default class Autocomplete {
       el.addEventListener('click', (event) => {
         const { onSelect } = this.options;
         if (typeof onSelect === 'function') onSelect(result.value);
+        this.addSelectedItemToInput(result.text);
       });
 
       fragment.appendChild(el);
     });
     return fragment;
+  }
+
+  addSelectedItemToInput(text) {
+    this.inputEl.value = text;
   }
 
   createQueryInputEl() {
