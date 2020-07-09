@@ -102,10 +102,12 @@ export default class Autocomplete {
   }
 
   handleKeyboardPress(keyboardCode) {
+    if(!this.results) return;
     if (keyboardCode == 13) {
       // Enter pressed
       let selectedItemIndex = this.selectedItem % this.results.length;
-      this.selectItem(this.listEl.children[selectedItemIndex]);
+      this.selectItem(this.results[selectedItemIndex]);
+      return;
     } else if (keyboardCode == 38) {
       // Up arrow key pressed
       this.selectedItem --;
@@ -123,6 +125,7 @@ export default class Autocomplete {
       element.classList.remove('result-hover');
     }
     let selectedItemIndex = this.selectedItem % this.results.length;
+    console.log(selectedItemIndex);
     this.listEl.children[selectedItemIndex].classList.add('result-hover');
   }
 
