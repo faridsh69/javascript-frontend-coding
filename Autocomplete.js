@@ -10,7 +10,7 @@ export default class Autocomplete {
     if(this.options.url){
       let url = this.options.url.replace('{query}', query)
         .replace('{numOfResults}', this.options.numOfResults);
-      this.options.data = this.getUrlResponse(url);
+      this.getUrlResponse(url);
     }else{
       let results = this.getResults(query, this.options.data);
       results = results.slice(0, this.options.numOfResults);
@@ -23,12 +23,11 @@ export default class Autocomplete {
     fetch(url, { headers: { "Content-Type": "application/json; charset=utf-8" }})
       .then(res => res.json())
       .then(response => {
-        this.options.data = response.items.map(user => ({
+        let results = response.items.map(user => ({
           text: user.login,
           value: user.id
         }));
-
-        this.updateDropdown(this.options.data);
+        this.updateDropdown(results);
       })
       .catch(err => {
         // handle ajax error

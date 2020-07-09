@@ -13,3 +13,7 @@ onSelect should return user ID.
 
 New APIs and your notes should be documented in SOLUTION.md.
  
+
+Next steps:
+	handle ajax error 
+	create loading if server response is not fast
